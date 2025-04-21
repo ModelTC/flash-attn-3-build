@@ -48,20 +48,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up swap space
-        if: runner.os == 'Linux'
-        uses: pierotofy/set-swap-space@v1.0
-        with:
-          swap-size-gb: 10
+      # - name: Set up swap space
+      #   if: runner.os == 'Linux'
+      #   uses: pierotofy/set-swap-space@v1.0
+      #   with:
+      #     swap-size-gb: 10
+
+      - name: Setup swap space
+        run: |
+          sudo fallocate -l 8G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
 
       # clean cache image
-      - name: Clean up Docker space
-        run: |
-          echo "Cleaning up Docker space..."
-          docker system prune -af
-          docker volume prune -f
-          docker image prune -af
-          docker container prune -f
+      # - name: Clean up Docker space
+      #   run: |
+      #     echo "Cleaning up Docker space..."
+      #     docker system prune -af
+      #     docker volume prune -f
+      #     docker image prune -af
+      #     docker container prune -f
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
