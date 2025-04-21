@@ -33,21 +33,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup 8G swap space
+      - name: Add 10G Swap
         run: |
-          if sudo swapon --show=NAME | grep -q '/swapfile'; then
-            echo "Existing swapfile detected. Turning off and deleting..."
-            sudo swapoff /swapfile
-            sudo rm -f /swapfile
-          fi
-
-          echo "Creating new swapfile..."
-          sudo fallocate -l 8G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=8192
+          echo ">>> Creating 10G swap file..."
+          sudo fallocate -l 10G /swapfile
           sudo chmod 600 /swapfile
           sudo mkswap /swapfile
           sudo swapon /swapfile
-
-          echo "Swap status:"
           swapon --show
 
       - name: Install cosign
