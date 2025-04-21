@@ -33,7 +33,7 @@ RUN case ${TARGETPLATFORM} in \
 
 WORKDIR /root
 
-RUN pip install torch==2.5.1
+RUN pip install --no-cache-dir --ignore-installed --extra-index-url https://download.pytorch.org/whl/cu124 torch==2.5.1
 RUN pip install --no-cache-dir nvidia-nccl-cu12==2.25.1  # for allreduce hang issues in multinode H100
 
 RUN git clone https://github.com/Dao-AILab/flash-attention.git -b v2.7.4.post1
