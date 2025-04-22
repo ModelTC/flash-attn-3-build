@@ -34,9 +34,8 @@ RUN case ${TARGETPLATFORM} in \
 WORKDIR /root
 
 RUN pip install --no-cache-dir --ignore-installed --extra-index-url https://download.pytorch.org/whl/cu124 torch==2.5.1
-RUN pip install --no-cache-dir nvidia-nccl-cu12==2.25.1  # for allreduce hang issues in multinode H100
 
 RUN git clone https://github.com/Dao-AILab/flash-attention.git -b v2.7.4.post1
-RUN cd flash-attention/hopper && MAX_JOBS=1 NVCC_THREADS=1 python setup.py bdist_wheel
+RUN cd flash-attention/hopper && MAX_JOBS=1 NVCC_THREADS=1 FLASH_ATTN_CUDA_ARCHS=90 python setup.py bdist_wheel
 RUN gh release create v2.7.4.post1 dist/*.whl --title "Release v2.7.4.post1" --notes "Release .whl package" \
     && echo "Uploaded to GitHub Releases"

@@ -33,25 +33,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Add 10G Swap
+      - name: Add Swap
         run: |
           SWAP_FILE="/swapfile"
           
           echo "Trying to disable and remove existing swap if needed..."
-          # 如果是 swap，先关闭
           if swapon --show=NAME | grep -q "$SWAP_FILE"; then
             echo "Disabling existing swap at $SWAP_FILE..."
             sudo swapoff "$SWAP_FILE"
           fi
       
-          # 如果文件仍存在（即便非 swap），也删除
           if [ -f "$SWAP_FILE" ]; then
             echo "Removing existing file at $SWAP_FILE..."
             sudo rm -f "$SWAP_FILE"
           fi
       
-          echo "Creating new 10G swap file..."
-          sudo fallocate -l 10G "$SWAP_FILE"
+          echo "Creating new 16G swap file..."
+          sudo fallocate -l 16G "$SWAP_FILE"
           sudo chmod 600 "$SWAP_FILE"
           sudo mkswap "$SWAP_FILE"
           sudo swapon "$SWAP_FILE"
