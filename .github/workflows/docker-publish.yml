@@ -49,10 +49,9 @@ jobs:
             sudo rm -f "$SWAP_FILE"
           fi
 
-          SWAP_FILE="/swapfile"
           echo "Creating new 32G swap file..."
           # sudo fallocate -l 32 "$SWAP_FILE"
-          sudo dd if=/dev/zero of=/mnt/swapfile bs=1G count=32
+          sudo dd if=/dev/zero of=$SWAP_FILE bs=1G count=32
           sudo chmod 600 "$SWAP_FILE"
           sudo mkswap "$SWAP_FILE"
           sudo swapon "$SWAP_FILE"
