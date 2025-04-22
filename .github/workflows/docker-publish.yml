@@ -48,8 +48,8 @@ jobs:
             sudo rm -f "$SWAP_FILE"
           fi
       
-          echo "Creating new 32G swap file..."
-          sudo fallocate -l 32 "$SWAP_FILE"
+          echo "Creating new 24G swap file..."
+          sudo fallocate -l 24 "$SWAP_FILE"
           sudo chmod 600 "$SWAP_FILE"
           sudo mkswap "$SWAP_FILE"
           sudo swapon "$SWAP_FILE"
