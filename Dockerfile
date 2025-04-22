@@ -37,5 +37,6 @@ RUN pip install --no-cache-dir --ignore-installed --extra-index-url https://down
 
 RUN git clone https://github.com/Dao-AILab/flash-attention.git -b v2.7.4.post1
 RUN cd flash-attention/hopper && MAX_JOBS=1 NVCC_THREADS=1 FLASH_ATTN_CUDA_ARCHS=90 python setup.py bdist_wheel
+RUN apt-get install gh
 RUN gh release create v2.7.4.post1 dist/*.whl --title "Release v2.7.4.post1" --notes "Release .whl package" \
     && echo "Uploaded to GitHub Releases"
