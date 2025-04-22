@@ -37,6 +37,7 @@ jobs:
         run: |
           SWAP_FILE="/mnt/swapfile"
           
+          swapon --show
           echo "Trying to disable and remove existing swap if needed..."
           if swapon --show=NAME | grep -q "$SWAP_FILE"; then
             echo "Disabling existing swap at $SWAP_FILE..."
@@ -48,8 +49,9 @@ jobs:
             sudo rm -f "$SWAP_FILE"
           fi
 
-          echo "Creating new 16G swap file..."
-          sudo fallocate -l 16 "$SWAP_FILE"
+          SWAP_FILE="/swapfile"
+          echo "Creating new 32G swap file..."
+          sudo fallocate -l 32 "$SWAP_FILE"
           sudo chmod 600 "$SWAP_FILE"
           sudo mkswap "$SWAP_FILE"
           sudo swapon "$SWAP_FILE"
