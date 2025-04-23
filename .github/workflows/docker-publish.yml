@@ -29,6 +29,7 @@ jobs:
           haskell: true
           large-packages: true
           swap-storage: false
+          docker-images: false
 
       - name: Checkout repository
         uses: actions/checkout@v3
