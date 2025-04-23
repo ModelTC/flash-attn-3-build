@@ -107,3 +107,20 @@ jobs:
           TAGS: ${{ steps.meta.outputs.tags }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+
+      - name: Export wheel from image
+        run: |
+          docker create --name temp-container ${{ steps.build-and-push.outputs.imageid }}
+          docker cp temp-container:/out ./out
+          docker rm temp-container
+
+      - name: Upload .whl to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG_NAME=${GITHUB_REF##*/}
+          gh release create "$TAG_NAME" ./out/*.whl \
+            --title "Release $TAG_NAME" \
+            --notes "Auto-release from GitHub Actions" \
+            || echo "Release already exists, skipping"

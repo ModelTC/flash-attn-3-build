@@ -37,12 +37,4 @@ RUN pip install --no-cache-dir --ignore-installed --extra-index-url https://down
 
 RUN git clone https://github.com/Dao-AILab/flash-attention.git -b v2.7.4.post1
 RUN cd flash-attention/hopper && MAX_JOBS=1 NVCC_THREADS=1 FLASH_ATTN_CUDA_ARCHS=90 python setup.py bdist_wheel
-RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
-      dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
-    chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && \
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
-      tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
-    apt-get update && \
-    apt-get install -y gh
-RUN gh release create v2.7.4.post1 dist/*.whl --title "Release v2.7.4.post1" --notes "Release .whl package" \
-    && echo "Uploaded to GitHub Releases"
+RUN mkdir -p /out && cp flash-attention/hopper/dist/*.whl /out/
