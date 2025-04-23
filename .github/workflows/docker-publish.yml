@@ -110,9 +110,14 @@ jobs:
 
       - name: Export wheel from image
         run: |
-          docker create --name temp-container ${{ steps.build-and-push.outputs.imageid }}
-          docker cp temp-container:/out ./out
-          docker rm temp-container
+          CONTAINER_TAG=${{ steps.meta.outputs.tags }}  # Use the same tag here
+          CONTAINER_ID=$(docker create $CONTAINER_TAG)
+          # Copy wheel files from the container to the local machine
+          docker cp "$CONTAINER_ID:/out" ./out
+          # Remove the container
+          docker rm "$CONTAINER_ID"
+          # Verify wheel file has been copied
+          ls ./out
 
       - name: Upload .whl to GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
