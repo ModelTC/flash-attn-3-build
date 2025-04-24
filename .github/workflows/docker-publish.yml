@@ -110,7 +110,7 @@ jobs:
 
       - name: Export wheel from image
         run: |
-          CONTAINER_TAG=${{ steps.meta.outputs.tags }}  # Use the same tag here
+          CONTAINER_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
           CONTAINER_ID=$(docker create $CONTAINER_TAG)
           # Copy wheel files from the container to the local machine
           docker cp "$CONTAINER_ID:/out" ./out
